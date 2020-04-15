@@ -1,25 +1,34 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use App\Exceptions\NoSubscriberFoundException;
+use App\HttpClient;
 use App\PubSubService;
+use App\SubscriptionRepository;
 use Tests\TestCase;
 use Mockery as m;
 
 class PubSubServiceTest extends TestCase
 {
     /**
-     * @var SubscriptionRepository
+     * @var m\MockInterface|SubscriptionRepository
      */
     protected $subscriptionRepository;
+
+    /**
+     * @var m\MockInterface|HttpClient
+     */
+    protected $httpClient;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->subscriptionRepository = m::mock("App\SubscriptionRepository");
+        $this->httpClient = m::mock("App\HttpClient");
     }
 
     public function testSubscriptionSuccessfullyRegistered()
@@ -32,8 +41,30 @@ class PubSubServiceTest extends TestCase
             ->with($topic, $url)
             ->once();
 
-        $service = new PubSubService($this->subscriptionRepository);
+        $service = new PubSubService(
+            $this->subscriptionRepository,
+            $this->httpClient
+        );
 
         $service->registerSubscription($topic, $url);
     }
+
+    public function testPublishingEventHavingNoSubscriberThrows()
+    {
+        $this->subscriptionRepository->shouldReceive("getSubscribers")
+            ->once()
+            ->andReturn([]);
+
+        $service = new PubSubService(
+            $this->subscriptionRepository,
+            $this->httpClient
+        );
+
+        $this->expectException(NoSubscriberFoundException::class);
+
+        $service->publish("topic1", json_encode([
+            "message"=> "hello"
+        ]));
+    }
+
 }

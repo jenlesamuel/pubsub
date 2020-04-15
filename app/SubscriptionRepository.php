@@ -7,7 +7,7 @@ namespace App;
 interface SubscriptionRepository
 {
     /**
-     * Registers a subscriber
+     * Registers a subscription
      *
      * @param string $topic
      * @param string $url
@@ -15,9 +15,10 @@ interface SubscriptionRepository
     public function addSubscription(string $topic, string $url): void;
 
     /**
-     * Returns a collection of all registered subscriptions
+     * Returns a collection of all subscribers to a topic
      *
+     * @param string $topic
      * @return array
      */
-    public function allSubscriptions(): array;
+    public function getSubscribers(string $topic): array;
 }

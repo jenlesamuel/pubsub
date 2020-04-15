@@ -19,7 +19,6 @@ class IndexController extends Controller
      * Create a new controller instance.
      *
      * @param PubSubService $pubSubService
-     * @return void
      */
     public function __construct(PubSubService $pubSubService)
     {
@@ -35,20 +34,52 @@ class IndexController extends Controller
      */
     public function registerSubscription(Request $request, string $topic): JsonResponse
     {
-        $subscriberUrl = $request->input("callback_url");
+        $content = $request->getContent();
 
-        if (! $subscriberUrl) {
+        if (! $content) {
             return response()->json(
-                "callback_url query parameter is required",
-                400
+                ["error" => "Empty request body", "status" => false], 400
             );
         }
 
-        $this->pubSubService->registerSubscription($topic, $subscriberUrl);
+        $content = json_decode($content, true);
+        if (!isset($content["url"])) {
+            return response()->json(
+                ["error" => "Url parameter is required", "status" => false], 400
+            );
+        }
 
-        return response()->json(
-            "Success",
-            201
-        );
+        $subscriberUrl = $content["url"];
+        $data = $this->pubSubService->registerSubscription($topic, $subscriberUrl);
+
+        return response()->json(["data" => $data, "status" => true],201);
+    }
+
+    /**
+     * Handles publishing an event
+     *
+     * @param Request $request
+     * @param string $topic
+     * @throws \App\Exceptions\NoSubscriberFoundException
+     * @return JsonResponse
+     */
+    public function publish(Request $request, string $topic): JsonResponse
+    {
+        $content = $request->getContent();
+        $this->pubSubService->publish($topic, $content);
+
+        return response()->json(["data" => "success", "status" => true],200);
+    }
+
+    /**
+     * Prints out event data
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function event(Request $request)
+    {
+        echo $request->getContent();
+        return response()->json(["data" => "success", "status" => true], 200);
     }
 }

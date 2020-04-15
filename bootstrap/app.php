@@ -50,7 +50,7 @@ $app->singleton(
 
 $app->singleton(
     App\SubscriptionRepository::class,
-    App\SubscriptionInMemoryRepository::class
+    App\SubscriptionCacheRepository::class
 );
 
 /*

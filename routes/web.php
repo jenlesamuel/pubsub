@@ -13,3 +13,6 @@
 
 Route::post("/subscribe/{topic}", "IndexController@registerSubscription");
 
+Route::post("/publish/{topic}", "IndexController@publish");
+
+Route::post("/event", "IndexController@event");

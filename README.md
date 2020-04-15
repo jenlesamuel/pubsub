@@ -1,24 +1,48 @@
-# Lumen PHP Framework
+# PubSub
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+This is an implementation of a publisher/subscriber system using http requests. 
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+Lumen (a very fast PHP micro-framework) was used as the development framework.
 
-## Official Documentation
+## Readme Notes
+* {project root directory} is a placeholder for the root directory of this project
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+## Setup
 
-## Contributing
+* `$ cd {project root directory} # change directory to project root` 
+* `$ composer install # install project dependencies`
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Project structure
+* Core project code can be found in the app directory relative to the project's root directory
+* Unit and integration tests can be found in tests/Unit and tests/Feature directories both relative to the project's root directory 
 
-## Security Vulnerabilities
+## Run Application
+Project can be run (in development mode) in one of two ways
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+### From start-up script
+* `$ cd {project root directory} # change directory to project root` 
+* `$ chmod 744 start-server.sh # add permission to execute script`
+* `$ ./start-server.sh # server will be listening on port 8000`
 
-## License
+### With built-in php Server
+* `$ cd {project root directory}/public # navigate to public folder`
+* `$ php -S localhost:8000 # run built-in php server listen on port 8000`
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Run Tests
+As a prerequisite, ensure all project dependencies have been installed as specified under the **Setup** section
+
+### Run all tests (Unit and Integration)
+* `$ cd {project root directory} # change directory to project root` 
+* `$ ./vendor/bin/phpunit tests`
+
+### Run only unit tests
+* `$ cd {project root directory} # change directory to project root` 
+* `$ ./vendor/bin/phpunit tests/Unit`
+
+### Run only Integration tests
+* `$ cd {project root directory} # change directory to project root` 
+* `$ ./vendor/bin/phpunit tests/Feature`
+
+
+
+
